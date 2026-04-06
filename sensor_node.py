@@ -1,0 +1,19 @@
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+import random
+
+class SensorNode(Node):
+    def __init__(self):
+        super().__init__('sensor_node')
+        self.publisher_ = self.create_publisher(String, 'sensor_data', 10)
+        self.timer = self.create_timer(1.0, self.publish_data)
+
+    def publish_data(self):
+        msg = String()
+        msg.data = f'Temperatura: {random.uniform(20.0, 30.0):.2f}'
+        self.publisher_.publish(msg)
+        self.get_logger().info(f'Publicando: {msg.data}')
+
+def main():
+    rclpy.init(); rclpy.spin(SensorNode()); rclpy.shutdown()
